@@ -1,0 +1,19 @@
+{
+  "name": "app_server",
+  "version": "1.0.0",
+  "description": "App server for music license NFT platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mohan",
+  "license": "ISC",
+  "dependencies": {
+    "sequelize": "^6.19.0",
+    "truffle-contract": "^4.0.31",
+    "web3": "^1.7.3"
+  },
+  "devDependencies": {
+    "sqlite3": "^5.0.4"
+  }
+}
