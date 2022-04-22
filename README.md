@@ -1,8 +1,5 @@
 # software license-management-as-nft
 
-Project background
-=================================================
-
 This project aims bring software and mobile apps license management onto a public blockchain platform. Software and mobile apps license could be represented as ERC721 - non fungible tokens and this approach is already gaining popularity among software product vendors (Reference- https://medium.com/spendee/nfts-the-future-of-software-licensing-digital-ownership-6bc42568cb72)
 
 Roadmap (Technical and Product)
