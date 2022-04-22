@@ -8,7 +8,7 @@ This project is work in progress. Please refer below technical roadmap for progr
                                                                                             |
                                                                                         (Current)  
 
-#### Smart contract (Completed) ----------> Smart Contract Middleware (Completed) ----------> Database Integration -----------> API Service ----------> User Interface -----------> Crypto Wallet Integration
+#### Smart contract (Completed) ----------> Smart Contract Middleware (Completed) ----------> Database Integration -----------> API Service ----------> User Interface -----------> Crypto Wallet Integration ----------> Contract and API Integration Tests -----------> Support multiple software product vendors
 
 
 #### Tech Stack
