@@ -4,9 +4,9 @@ This project aims bring software and mobile apps license management onto a publi
 
 This project is work in progress. Please refer below technical roadmap for progress and components to be built.
 
-                                                                                              |
-                                                                                              |
-                                                                                          (Current)  
+                                                                                            |
+                                                                                            |
+                                                                                        (Current)  
 
 Smart contract (Completed) ----------> Smart Contract Middleware (Completed) ----------> Database Integration -----------> API Service ----------> User Interface -----------> Crypto Wallet Integration
 
