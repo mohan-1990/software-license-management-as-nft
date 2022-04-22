@@ -13,9 +13,9 @@ Smart contract (Completed) ----------> Smart Contract Middleware (Completed) ---
 
 Tech Stack
 
-Smart Contract:- Open Zeppelin ERC721 Pausable with customization for provenance (Reference:- https://docs.openzeppelin.com/contracts/4.x/api/token/erc721)
-Smart Contract Middleware:- Node.js
-Database:- Sqlite, Sequelize ORM
-API Service:- Node.js
-User Interface:- Vue.js
-Crypto Wallet:- Metamask
+# Smart Contract:- Open Zeppelin ERC721 Pausable with customization for provenance (Reference:- https://docs.openzeppelin.com/contracts/4.x/api/token/erc721)
+# Smart Contract Middleware:- Node.js
+# Database:- Sqlite, Sequelize ORM
+# API Service:- Node.js
+# User Interface:- Vue.js
+# Crypto Wallet:- Metamask
