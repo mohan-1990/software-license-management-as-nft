@@ -8,14 +8,14 @@ This project is work in progress. Please refer below technical roadmap for progr
                                                                                             |
                                                                                         (Current)  
 
-Smart contract (Completed) ----------> Smart Contract Middleware (Completed) ----------> Database Integration -----------> API Service ----------> User Interface -----------> Crypto Wallet Integration
+#### Smart contract (Completed) ----------> Smart Contract Middleware (Completed) ----------> Database Integration -----------> API Service ----------> User Interface -----------> Crypto Wallet Integration
 
 
-Tech Stack
+####Tech Stack
 
 ### Smart Contract:- Open Zeppelin ERC721 Pausable with customization for provenance (Reference:- https://docs.openzeppelin.com/contracts/4.x/api/token/erc721)
-### Smart Contract Middleware:- Node.js
-### Database:- Sqlite, Sequelize ORM
-### API Service:- Node.js
-### User Interface:- Vue.js
-### Crypto Wallet:- Metamask
+##### Smart Contract Middleware:- Node.js
+##### Database:- Sqlite, Sequelize ORM
+##### API Service:- Node.js
+##### User Interface:- Vue.js
+##### Crypto Wallet:- Metamask
