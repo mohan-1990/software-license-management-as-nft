@@ -29,7 +29,12 @@ async function init(db_global) {
             allowNull: false
         }
       }, {
-        paranoid: true
+        tableName: 'User',
+        createdAt: 'created_at',
+        updatedAt: 'updated_at',
+        deletedAt: 'deletedAt',
+        paranoid: true,
+        timestamps: true
       });
       
       // the defined model is the class itself
@@ -50,30 +55,44 @@ async function create(User, params) {
         password: params['password']
     });
 
-    console.log("New user: " + emailId + " created successfully.");
+    console.log("New user: " + params['emailId'] + " created successfully.");
     return user;
 }
 
 async function read(User, emailId) {
-    const user = User.findAll({
+    const user = await User.findAll({
         where: {
             emailId: emailId
-        }
+        },
+        limit: 1
     });
 
     console.log("Read by emailId: " + emailId + ". Result: " + JSON.stringify(user));
-    
+
+    if(user instanceof Array) {
+        return user[0];
+    }
+    else {
+        return undefined;
+    }
 }
 
 async function read2(User, phone) {
     const user = User.findAll({
         where: {
             phone: phone
-        }
+        },
+        limit: 1
     });
 
     console.log("Read by phone: " + phone + ". Result: " + JSON.stringify(user));
     
+    if(user instanceof Array) {
+        return user[0];
+    }
+    else {
+        return undefined;
+    }
 }
 
 async function delete2(User, emailId) {
@@ -82,7 +101,6 @@ async function delete2(User, emailId) {
         const response = await user.destroy();
         console.log("Delete user by emailId: " + emailId + ". Result: " + response);
     }
-    
 }
 
 module.exports = {

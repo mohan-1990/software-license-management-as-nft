@@ -5,13 +5,13 @@ const PendingTransfer = require('./models/gana/PendingTransfer');
 
 const global = new Sequelize({
     dialect: 'sqlite',
-    storage: './global.sqlite',
+    storage: './db/global.sqlite3',
     logging: console.log
 });
 
 const gana = new Sequelize({
     dialect: 'sqlite',
-    storage: './gana.sqlite',
+    storage: './db/gana.sqlite3',
     logging: console.log
 });
 

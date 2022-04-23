@@ -43,9 +43,9 @@ async function testMiddlewareToContractConnection() {
     let th = await gana_contract_middleware.retrieveTransferHistory(1);
     console.log("Transfer history of tokenId 1:" + JSON.stringify(th));
 
-    let contractConstants = await gana_contract_middleware.getContractInstanceConstants();
+    /* let contractConstants = await gana_contract_middleware.getContractInstanceConstants();
     let tokenId = await gana_contract_middleware.mint(contractConstants["availabeAccounts"][1]);
-    console.log("Newly minted tokenId: " + tokenId);
+    console.log("Newly minted tokenId: " + tokenId); */
 }
 
 main();

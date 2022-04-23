@@ -25,7 +25,12 @@ async function init(db_gana) {
             type: DataTypes.STRING
         }
       }, {
-        paranoid: true
+        tableName: 'PendingTransfer',
+        createdAt: 'created_at',
+        updatedAt: 'updated_at',
+        deletedAt: 'deletedAt',
+        paranoid: true,
+        timestamps: true
       });
       
       // the defined model is the class itself

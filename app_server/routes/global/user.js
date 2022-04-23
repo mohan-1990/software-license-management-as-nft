@@ -31,17 +31,27 @@ async function route_CreateUser(app, route) {
     
         if (firstName != "" && lastName != "" && emailId != "" &&
         phone != "" && password != "") {
-            let params = {
-                firstName: firstName,
-                lastName: lastName,
-                emailId: emailId,
-                phone: phone,
-                password: password
-            };
-            let response = await User.create(db_context.models.global['User'], params);
 
-            res.status(200);
-            res.send("User created successfuly.");
+            let existingUser = await User.read(db_context.models.global['User'], emailId);
+
+            if(existingUser !== undefined) {
+                res.status(409);
+                res.send("User with email id: " + emailId + 
+                "exists already. Please try again with differnt email id.");
+            }
+            else {
+                let params = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    emailId: emailId,
+                    phone: phone,
+                    password: password
+                };
+                let response = await User.create(db_context.models.global['User'], params);
+    
+                res.status(200);
+                res.send("User created successfuly.");
+            }
         }  
         else {
             res.status(400);
@@ -58,7 +68,8 @@ async function route_AuthenticateUser(app, route) {
         if (emailId != "" && password != "") {
             let user = await User.read(db_context.models.global['User'], emailId);
 
-            if(user.password === password) {
+            if(user!== undefined && user instanceof db_context.models.global['User'] && 
+            user.password === password) {
                 res.status(200);
                 res.cookie('emailId', emailId);
                 res.send("Authentication successful!")
