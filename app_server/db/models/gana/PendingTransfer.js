@@ -25,7 +25,7 @@ async function init(db_gana) {
             type: DataTypes.STRING
         }
       }, {
-        // Other model options go here
+        paranoid: true
       });
       
       // the defined model is the class itself

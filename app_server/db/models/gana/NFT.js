@@ -30,7 +30,7 @@ async function init(db_gana) {
             allowNull: false
         }
       }, {
-        // Other model options go here
+        paranoid: true
       });
       
       // the defined model is the class itself

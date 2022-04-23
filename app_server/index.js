@@ -1,5 +1,10 @@
 const db_context = require('./db/context');
 const gana_contract_middleware = require('./contract_middleware/gana');
+const routes = require('./routes/routes');
+
+const express = require('express');
+const bodyParser = require("body-parser");
+var cookieParser = require('cookie-parser');
 
 async function main() {
     // Initiliaze database context and connections
@@ -8,6 +13,30 @@ async function main() {
     // Initiliaze contract midleware
     await gana_contract_middleware.init();
 
+    // Initialize app server
+    await initializeApp();
+
+    // Test middleware to contract connections
+    await testMiddlewareToContractConnection();
+}
+
+async function initializeApp() {
+    const app = express();
+    const port = 3000;
+
+    app.use(bodyParser.urlencoded({
+        extended: true
+    }));
+    app.use(cookieParser());
+    app.use(bodyParser.json());
+
+    // Initialize app routes
+    await routes.init(app);
+
+    app.listen(port, () => console.log(`App server listening on port ${port}!`))
+}
+
+async function testMiddlewareToContractConnection() {
     let tc = await gana_contract_middleware.retrieveTransferCounts(1);
     console.log("Transfer counts of tokenId 1:" + tc);
 
