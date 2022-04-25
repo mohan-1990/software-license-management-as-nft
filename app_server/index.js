@@ -1,6 +1,7 @@
 const db_context = require('./db/context');
 const gana_contract_middleware = require('./contract_middleware/gana');
 const routes = require('./routes/routes');
+const events = require('./events/events');
 
 const express = require('express');
 const bodyParser = require("body-parser");
@@ -12,6 +13,9 @@ async function main() {
 
     // Initiliaze contract midleware
     await gana_contract_middleware.init();
+
+    // Initiliaze contract event handlers
+    events.init();
 
     // Initialize app server
     await initializeApp();

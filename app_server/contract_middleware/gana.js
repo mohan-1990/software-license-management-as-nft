@@ -1,11 +1,12 @@
 const Web3 = require('web3');
 const contract = require('truffle-contract');
 const ganaABI = require('../../build/contracts/Gana.json');
+const _ = require('underscore');
 
 
 // Read JSON and attach RPC connection (Provider)
 var gana = contract(ganaABI);
-var provider = new Web3.providers.HttpProvider("http://127.0.0.1:7545");
+var provider = new Web3.providers.WebsocketProvider("ws://127.0.0.1:7545");
 var web3 = new Web3(provider);
 gana.setProvider(provider);
 var contractInstance = null;
@@ -20,6 +21,7 @@ var contractInstanceConstants;
 async function init() {
     await unlockAccounts();
     await initContract();
+    //subscribeToEvent('Transfer', TransferEvent);
 }
 
 async function unlockAccounts() {
@@ -95,7 +97,7 @@ async function mint(to) {
         }
     }
     catch(error) {
-        let message = "Some error when calling retrieveTransferHistory for tokenId: " + tokenId;
+        let message = "Some error when calling mint for address: " + to;
         console.error(message, error);
         response = message;
     }
@@ -108,10 +110,36 @@ async function getContractInstanceConstants() {
     return contractInstanceConstants;
 }
 
+function subscribeToEvent(eventName, callback) {
+    // Below code snippet copied with thanks and modification from 
+    // https://medium.com/coinmonks/how-to-subscribe-smart-contract-events-using-web3-1-0-93e996c06af2
+    const subscribedEvents = {};
+    const eventJsonInterface = _.find(contractInstance.contract._jsonInterface, 
+        o => o.name === eventName && o.type === 'event');
+    const subscription = web3.eth.subscribe('logs', {
+        address: contractAddress,   
+        topics: [eventJsonInterface.signature]  
+    }, async function (error, result) 
+    {    
+        if (!error) 
+        {      
+            const eventObj = web3.eth.abi.decodeLog(eventJsonInterface.inputs, 
+                result.data, result.topics.slice(1));      
+            // console.log(`New ${eventName}!`, eventObj)
+            await callback(eventObj);    
+        }
+        else {
+            console.error(`Error in contract event sbscription ${eventName}`, error);
+        }  
+    });  
+    subscribedEvents[eventName] = subscription
+}
+
 module.exports = {
     init: init,
     retrieveTransferCounts: retrieveTransferCounts,
     retrieveTransferHistory: retrieveTransferHistory,
     mint: mint,
-    getContractInstanceConstants: getContractInstanceConstants
+    getContractInstanceConstants: getContractInstanceConstants,
+    subscribeToEvent: subscribeToEvent
 }
