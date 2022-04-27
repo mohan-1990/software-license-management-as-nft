@@ -28,10 +28,8 @@ Tech Stack
 FAQ
 ==================================================
 #### 1) How would the software vendor pay for minting licenses?
-The platform (api server) will keep an account of number of successful mints, the timestamp and the gas used to mint. This information can be used to bill the software vendor on a monthly basis
+The platform (api server) will keep an account of number of successful license mints, the timestamp and the gas used to mint. This information can be used to bill the software vendor on a monthly basis
 #### 2) What is the cost of transfering the software license from one person to other?
 Gas used to send tranfer request + 1% of license value as plaftorm fee
 #### 3) What is the cost of reading the license transfer history?
 Free
-
-
