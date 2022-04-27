@@ -12,6 +12,12 @@ Roadmap (Technical and Product)
 #### Smart contract (Completed) ----------> Smart Contract Middleware (Completed) ----------> Database Integration -----------> API Service ----------> User Interface -----------> Crypto Wallet Integration ----------> Contract and API Integration Tests -----------> Support multiple software product vendors
 
 
+
+Architecture
+==================================================
+
+![Architecture](https://user-images.githubusercontent.com/7190454/165429415-29a14075-f498-477d-bb8f-aaadad103c96.png)
+
 Tech Stack
 ==================================================
 
