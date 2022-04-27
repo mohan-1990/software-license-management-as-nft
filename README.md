@@ -25,17 +25,13 @@ Tech Stack
 ##### Crypto Wallet:- Metamask
 
 
-Steps to run project (Linux)
+FAQ
 ==================================================
-1) Install dependencies 
-  a) Ganache - https://www.trufflesuite.com/ganache
-  b) Truffle suite - https://trufflesuite.com/docs/truffle/getting-started/installation/
-  c) Node.js - https://nodejs.org/en/download/
-  d) Sqlite3 - https://www.sqlite.org/download.html
-2) Start Ganache GUI
-3) Clone this project - git clone https://github.com/mohan-1990/software-license-management-as-nft.git
-4) Open terminal and run below commands 
-5) truffle migrate
-6) cd app_server
-7) npm install
-8) npm start
+1) How would the software vendor pay for minting licenses?
+The platform (api server) will keep an account of number of successful mints, the timestamp and the gas used to mint. This information can be used to bill the software vendor on a monthly basis
+2) What is the cost of transfering the software license from one person to other?
+Gas used to send tranfer request + 1% of license value as plaftorm fee
+3) What is the cost of reading the license transfer history?
+Free
+
+
