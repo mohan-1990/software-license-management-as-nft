@@ -21,7 +21,7 @@ Tech Stack
 ##### Smart Contract Middleware:- Node.js
 ##### Database:- Sqlite, Sequelize ORM
 ##### API Service:- Node.js
-##### User Interface:- Vue.js
+##### User Interface:- Flutter
 ##### Crypto Wallet:- Metamask
 
 
