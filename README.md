@@ -5,18 +5,14 @@ This project aims bring software and mobile apps license management onto a publi
 Roadmap (Technical and Product)
 ==================================================
 
-                                                                                            |
-                                                                                            |
-                                                                                        (Current)  
-
-#### Smart contract (Completed) ----------> Smart Contract Middleware (Completed) ----------> Database Integration -----------> API Service ----------> User Interface -----------> Crypto Wallet Integration ----------> Contract and API Integration Tests -----------> Support multiple software product vendors
-
+![Roadmap](https://user-images.githubusercontent.com/7190454/165434811-d009a711-7583-42d1-ac9e-f39d7834c64d.png)
 
 
 Architecture
 ==================================================
 
-![Architecture](https://user-images.githubusercontent.com/7190454/165429415-29a14075-f498-477d-bb8f-aaadad103c96.png)
+![Architecture](https://user-images.githubusercontent.com/7190454/165433245-4667356b-77d1-4224-afe7-11a2a25c0b70.png)
+
 
 Tech Stack
 ==================================================
