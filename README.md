@@ -17,7 +17,7 @@ Tech Stack
 ##### Smart Contract Middleware:- Node.js
 ##### Database:- Sqlite, Sequelize ORM
 ##### API Service:- Node.js
-##### User Interface:- Vue.js
+##### User Interface:- Vue.js (Free UI template copied with thanks from https://www.creative-tim.com/product/muse-vue-ant-design-dashboard)
 ##### Crypto Wallet:- Metamask
 
 
