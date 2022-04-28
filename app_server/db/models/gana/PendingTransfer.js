@@ -10,8 +10,7 @@ async function init(db_gana) {
         },
         tokenId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
-            unique: true
+            allowNull: false
         },
         ownerAddress: {
             type: DataTypes.STRING,

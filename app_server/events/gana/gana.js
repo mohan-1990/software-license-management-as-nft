@@ -18,15 +18,24 @@ async function TransferEvent(eventObj) {
         return;
     }
 
-    const nft = await NFT.read(db_context.models.gana['NFT'], eventObj['tokenId']);
-    if(nft !== undefined) {
-        const updateFlag = await PendingTransfer.update(db_context.models.gana['PendingTransfer'], 
-        eventObj['tokenId'], "Token transfred by owner: " + eventObj['from'] + " to: " + eventObj['to']);
-        const removeFlag = await PendingTransfer.delete(db_context.models.gana['PendingTransfer'], 
-        eventObj['tokenId']);
-        const updateFlag2 = await NFT.update2(db_context.models.gana['NFT'], eventObj['tokenId'], eventObj['to']);
-
-        console.log("Gana Transfer Evenet Handler: Ownership updated in database for tokenId: " + eventObj['tokenId'] + ". New owner: " + eventObj['to']);
+    try {
+        const tokenTransferTransaction = await db_context.sequelize_instances['gana'].transaction(async (t) => {
+            const nft = await NFT.read(db_context.models.gana['NFT'], eventObj['tokenId']);
+            if(nft !== undefined) {
+                const updateFlag = await PendingTransfer.update(db_context.models.gana['PendingTransfer'], 
+                eventObj['tokenId'], "Token transfred by owner: " + eventObj['from'] + " to: " + eventObj['to']);
+                const removeFlag = await PendingTransfer.delete(db_context.models.gana['PendingTransfer'], 
+                eventObj['tokenId']);
+                const updateFlag2 = await NFT.update2(db_context.models.gana['NFT'], eventObj['tokenId'], eventObj['to']);
+                console.log("Gana Transfer Evenet Handler: Ownership updated in database for tokenId: " + eventObj['tokenId'] + ". New owner: " + eventObj['to']);
+            }
+            else {
+                throw new Error("Gana db: Can't find NFT with tokenId: " + eventObj['tokenId']);
+            }
+        });
+    }
+    catch(ex) {
+        console.error("Some error occured in tokenTransferTransaction: ", ex);
     }
 }
 

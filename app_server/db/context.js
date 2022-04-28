@@ -15,6 +15,11 @@ const gana = new Sequelize({
     logging: console.log
 });
 
+let sequelize_instances = {
+    global: global,
+    gana: gana,
+}
+
 let models = {
     global: {},
     gana: {}
@@ -60,5 +65,6 @@ async function close() {
 module.exports = {
     init: init,
     close: close,
-    models: models
+    models: models,
+    sequelize_instances: sequelize_instances
 }
