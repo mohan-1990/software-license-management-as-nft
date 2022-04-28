@@ -2,6 +2,7 @@ const db_context = require('./db/context');
 const gana_contract_middleware = require('./contract_middleware/gana');
 const routes = require('./routes/routes');
 const events = require('./events/events');
+var cors = require('cors');
 
 const express = require('express');
 const bodyParser = require("body-parser");
@@ -27,6 +28,8 @@ async function main() {
 async function initializeApp() {
     const app = express();
     const port = 3000;
+
+    app.use(cors());
 
     app.use(bodyParser.urlencoded({
         extended: true
