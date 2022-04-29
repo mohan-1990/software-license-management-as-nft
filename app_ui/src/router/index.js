@@ -101,8 +101,9 @@ let routes = [
 	{
 		path: '/sign-up',
 		name: 'Sign-Up',
+		layout: 'default-no-header-footer',
 		meta: {
-			layoutClass: 'layout-sign-up',
+			layoutClass: 'default-no-header-footer',
 		},
 		component: () => import('../views/Sign-Up.vue'),
 	}

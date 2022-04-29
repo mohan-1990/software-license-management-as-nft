@@ -38,6 +38,10 @@
 					<a-form-item class="mb-10">
     					<a-switch v-model="rememberMe" /> Remember Me
 					</a-form-item>
+					<a-form-item class="mb-10">
+						<a-alert v-if="errorMsgVisible" :message="errorMsg" type="error" 
+						closable:after-close="errorMsgHandleClose" />
+					</a-form-item>
 					<a-form-item>
 						<a-button type="primary" block html-type="submit" class="login-form-button">
 							SIGN IN
@@ -46,7 +50,7 @@
 				</a-form>
 				<!-- / Sign In Form -->
 
-				<p class="font-semibold text-muted">Don't have an account? <router-link to="/sign-in" class="font-bold text-dark">Sign Up</router-link></p>
+				<p class="font-semibold text-muted">Don't have an account? <router-link to="/sign-up" class="font-bold text-dark">Sign Up</router-link></p>
 			</a-col>
 			<!-- / Sign In Form Column -->
 
@@ -68,6 +72,8 @@
 			return {
 				// Binded model property for "Sign In Form" switch button for "Remember Me" .
 				rememberMe: true,
+				errorMsgVisible: false,
+				errorMsg: '',
 			}
 		},
 		beforeCreate() {
@@ -77,8 +83,11 @@
 		methods: {
 			// Handles input validation after submission.
 			handleSubmit(e) {
-				signInController.submit(e, this.form, this.$router);
-			}
+				signInController.submit(e, this.form, this.$router, this);
+			},
+			errorMsgHandleClose() {
+				signInController.errorMsgHandleClose(this);
+			},
 		},
 	})
 

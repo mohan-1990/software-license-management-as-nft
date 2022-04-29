@@ -1,13 +1,14 @@
 import axios from "axios";
 
-function submit(e, $form, $router) {
+function submit(e, $form, $router, $ctx) {
     // console.log("Submit function called!");
     e.preventDefault();
+    $ctx.errorMsgVisible = false;
     $form.validateFields((err, values) => {
         if ( !err ) {
             // console.log('Received values of form: ', values) ;
             const params = { emailId: values['email'], password: values['password'] };
-            const authAPI = process.env.VUE_APP_GLOBAL_API + '/auth';
+            const authAPI = process.env.VUE_APP_USER_API + '/auth';
               axios.post(authAPI, params).then(response => {
                 if(response.status == 200) {
                     $router.push({path: '/sign-up'});
@@ -17,7 +18,10 @@ function submit(e, $form, $router) {
                 }
             }).catch(error => {
                 if(error.response.status == 401) {
-                    console.log("Invalid crdentials. Please try again with valid credentials.");
+                    let msg = "Invalid crdentials. Please try again with valid credentials.";
+                    $ctx.errorMsg = msg;
+                    $ctx.errorMsgVisible = true;
+                    console.log(msg);
                 }
                 else {
                     console.error("Some error when authentiating user. ", error);
@@ -27,6 +31,11 @@ function submit(e, $form, $router) {
     });
 }
 
+function errorMsgHandleClose($ctx) {
+    $ctx.errorMsgVisible = false;
+}
+
 export default ({
-    submit: submit
+    submit: submit,
+    errorMsgHandleClose: errorMsgHandleClose
 })
