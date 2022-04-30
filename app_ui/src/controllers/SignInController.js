@@ -11,7 +11,10 @@ function submit(e, $form, $router, $ctx) {
             const authAPI = process.env.VUE_APP_USER_API + '/auth';
               axios.post(authAPI, params).then(response => {
                 if(response.status == 200) {
-                    $router.push({path: '/sign-up'});
+                    localStorage.emailId = response.data['emailId'];
+                    localStorage.firstName = response.data['firstName'];
+                    localStorage.lastName = response.data['lastName'];
+                    $router.push({path: '/discover'});
                 }
                 else {
                     console.log("Unknown response code.");

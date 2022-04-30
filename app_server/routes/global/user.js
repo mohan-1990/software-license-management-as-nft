@@ -71,8 +71,13 @@ async function route_AuthenticateUser(app, route) {
             if(user!== undefined && user instanceof db_context.models.global['User'] && 
             user.password === password) {
                 res.status(200);
-                res.cookie('emailId', emailId);
-                res.send("Authentication successful!")
+                responseParams = {
+                    emailId: emailId,
+                    firstName: user['firstName'],
+                    lastName: user['lastName'],
+                    message: "Authentication successful!"
+                };
+                res.send(responseParams);
             }
             else {
                 res.status(401);
