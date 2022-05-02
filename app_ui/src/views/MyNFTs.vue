@@ -17,14 +17,29 @@
 						<a-avatar :size="74" shape="square" :src="walletImageSrc" />
 						<div class="avatar-info">
 							<h4 class="font-semibold m-0">Crypto Wallet</h4>
-							<p>{{walletName}}</p>
+							<a-tag class="tag-status" :class="isWalletConnected ? 'ant-tag-primary' : 'ant-tag-muted'">
+								{{ isWalletConnected ? "CONNECTED" : "NOT CONNECTED" }}
+							</a-tag>
 						</div>
 					</a-col>
 					<a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
-						<a-button type="primary">
+						<a-button type="primary" @click="initiateWalletConnection" :disabled="isWalletConnected">
 								CONNECT TO WALLET
 							</a-button>
 					</a-col>
+				</a-row>
+				<a-row type="flex" align="middle">
+					<a-descriptions :column="1" :style="{visibility: isWalletConnected ? 'visible' : 'hidden'}">
+						<a-descriptions-item label="Wallet Name">
+							{{walletName}}
+						</a-descriptions-item>
+						<a-descriptions-item label="Network Id">
+							{{networkId}}
+						</a-descriptions-item>
+						<a-descriptions-item label="Account">
+							{{account}}
+						</a-descriptions-item>
+					</a-descriptions>
 				</a-row>
 			</template>
 		</a-card>
@@ -34,14 +49,22 @@
 
 <script>
 
+	import myNFTsController from "../controllers/MyNFTsController";
 	export default ({
 		data() {
 			return {
-				walletName: "Not connected",
+				walletName: "",
 				isWalletConnected: false,
 				walletImageSrc: "images/face-1.jpg",
+				networkId: '',
+				account: '',
 			}
 		},
+		methods: {
+			async initiateWalletConnection() {
+				await myNFTsController.initiateWalletConnection(this);
+			}
+		}
 	})
 
 </script>
