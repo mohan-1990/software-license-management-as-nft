@@ -19,7 +19,7 @@ let routes = [
 		name: 'Sign-In',
 		layout: "default-no-header-footer",
 		meta: {
-			layoutClass: 'default-no-header-footer'
+			layoutClass: 'layout-default'
 		},
 		component: () => import('../views/Sign-In.vue'),
 	},
@@ -28,7 +28,7 @@ let routes = [
 		name: 'Sign-Up',
 		layout: 'default-no-header-footer',
 		meta: {
-			layoutClass: 'default-no-header-footer',
+			layoutClass: 'layout-default',
 		},
 		component: () => import('../views/Sign-Up.vue'),
 	},
@@ -45,6 +45,9 @@ let routes = [
 		path: '/mynfts',
 		name: 'My Software License NFTs',
 		layout: "dashboard",
+		meta: {
+			layoutClass: 'layout-mynft',
+		},
 		component: () => import('../views/MyNFTs.vue'),
 	},
 	{

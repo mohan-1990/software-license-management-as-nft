@@ -42,6 +42,11 @@
 		.header-control {
 			.btn-sign-in,
 			.ant-btn,
+			.ant-dropdown-trigger {
+				path {
+					fill: $color-gray-1;
+				}
+			}
 			.ant-dropdown-link {
 				svg path {
 					fill: $color-gray-1;
