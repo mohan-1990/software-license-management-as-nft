@@ -126,7 +126,7 @@
 			return {
 				walletName: "",
 				isWalletConnected: false,
-				walletImageSrc: "images/face-1.jpg",
+				walletImageSrc: "images/crypto-wallet.png",
 				networkId: '',
 				account: '',
 				mySWLicenseNFTs: {

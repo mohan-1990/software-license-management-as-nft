@@ -7,6 +7,7 @@ var cors = require('cors');
 const express = require('express');
 const bodyParser = require("body-parser");
 var cookieParser = require('cookie-parser');
+var fileUpload = require('express-fileupload');
 
 async function main() {
     // Initiliaze database context and connections
@@ -36,6 +37,9 @@ async function initializeApp() {
     }));
     app.use(cookieParser());
     app.use(bodyParser.json());
+    app.use(fileUpload({
+        limits: { fileSize: 5 * 1024 * 1024 },
+    }));
 
     // Initialize app routes
     await routes.init(app);
