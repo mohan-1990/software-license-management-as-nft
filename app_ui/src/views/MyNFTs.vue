@@ -54,6 +54,7 @@
 				<MySWLicenseNFTs
 					:data="mySWLicenseNFTs.data"
 					:columns="mySWLicenseNFTs.columns"
+					:mintBtnHandler="mintBtnHandler"
 				></MySWLicenseNFTs>
 				<!-- / My SW License NFTs Table Column -->
 
@@ -63,6 +64,25 @@
 		</a-row>
 		<!-- / My SW License NFTs Table -->
 
+		<!-- Mint New Software License NFT modal window -->
+		<a-row :gutter="24" type="flex">
+
+			<!-- Mint New Software License NFT modal window Column -->
+			<a-col :span="24" class="mb-24">
+				<a-modal v-model="displayMintModal" title="New Software License NFT Mint Form" 
+				@ok="handleMintModalOkBtnClick">
+					<CardMintSWLicenseNFTVue
+						:toAddress="account"
+						:onMintBtnClick="mintNewSoftwareLicenseNFT"
+					></CardMintSWLicenseNFTVue>
+				</a-modal>
+
+			</a-col>
+			<!-- / Mint New Software License NFT modal window Column -->
+
+		</a-row>
+		<!-- / Mint New Software License NFT modal window -->
+
 	</div>
 </template>
 
@@ -71,6 +91,7 @@
 	import myNFTsController from "../controllers/MyNFTsController";
 	// "My SW License NFTs" table component.
 	import MySWLicenseNFTs from '../components/Cards/CardSWLicenseNFTs';
+	import CardMintSWLicenseNFTVue from "../components/Cards/CardMintSWLicenseNFT.vue";
 
 	// "My SW License NFTs" table list of columns and their properties.
 	const mySWLicenseNFTsColumns = [
@@ -120,7 +141,8 @@
 
 	export default ({
 		components: {
-			MySWLicenseNFTs
+			MySWLicenseNFTs,
+			CardMintSWLicenseNFTVue,
 		},
 		data() {
 			return {
@@ -132,13 +154,23 @@
 				mySWLicenseNFTs: {
 					columns: mySWLicenseNFTsColumns,
 					data: mySWLicenseNFTsData
-				}
+				},
+				displayMintModal: false
 			}
 		},
 		methods: {
 			async initiateWalletConnection() {
 				await myNFTsController.initiateWalletConnection(this);
-			}
+			},
+			mintNewSoftwareLicenseNFT(params) {
+				myNFTsController.mint(params);
+			},
+			mintBtnHandler() {
+				this.displayMintModal = true;
+			},
+			handleMintModalOkBtnClick() {
+				console.log("Mint modal ok button clicked.");
+			},
 		}
 	})
 

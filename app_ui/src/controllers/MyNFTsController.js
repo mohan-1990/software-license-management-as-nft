@@ -35,6 +35,11 @@ async function getPrimaryAccount() {
     return accounts[0];
 }
 
+function mint(params) {
+  console.log("MyNFTsController -> Mint function called with params: " + JSON.stringify(params));
+}
+
 export default ({
-    initiateWalletConnection: initiateWalletConnection
+    initiateWalletConnection: initiateWalletConnection,
+    mint: mint
 })
