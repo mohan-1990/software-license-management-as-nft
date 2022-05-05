@@ -24,9 +24,16 @@ async function initiateWalletConnection($ctx) {
       }
       
       await ethereum.request({ method: 'eth_requestAccounts' });
-      $ctx.account = await getPrimaryAccount();
+      let account = await getPrimaryAccount();
+      $ctx.account = account;
       $ctx.networkId = window.ethereum.networkVersion;
       $ctx.isWalletConnected = true;
+
+      $ctx.bus.$emit('walletConnected', {
+        account: account,
+        networkId: window.ethereum.networkVersion
+      });
+
     } catch (error) {
       console.error("Some error when intiating connection with metamask: ", error);
     }
@@ -43,11 +50,23 @@ function mint(params, $ctx) {
   const mintAPI = process.env.VUE_APP_TOKEN_GANA_API + '/new';
   axios.post(mintAPI, params).then(response => {
     if(response.status == 200) {
-        $ctx.bus.$emit("msgToUser", {
-          msg: response.data,
-          type: 'success'
-        });
         $ctx.confirmMinting = false;
+        let counter = 5;
+        let timer = setInterval(() => {
+          if(counter == 0) {
+            $ctx.displayMintModal = false;
+            clearTimeout(timer);
+          }
+          else {
+            let message = response.data + ". This modal window will close automatically in " + 
+            counter + " seconds";
+            $ctx.bus.$emit("msgToUser", {
+              msg: message,
+              type: 'success'
+            });
+            counter--;
+          } 
+        }, 1000);
         $ctx.bus.$emit("newNFTMintSuccess");
     }
     else if(response.staus == 400) {
@@ -74,7 +93,41 @@ function mint(params, $ctx) {
   });
 }
 
+function retrieveTokenOf(owner) {
+  return new Promise((resolve, reject) => {
+    console.log("MyNFTsController -> retrieveTokenOf function called with params: " + owner);
+    const retrieveNFTsOfOwnerAPI = process.env.VUE_APP_TOKEN_GANA_API + '/tokensof?owner=' + owner;
+    axios.get(retrieveNFTsOfOwnerAPI).then(response => {
+      if(response.status == 200) {
+          let nfts = response.data;
+          let transformedData = nfts.map((item, index) => {
+            return {
+              key: index,
+              tokenId: item['tokenId'],
+              description: item['description'],
+              ownerAddress: item['ownerAddress'],
+              nft: {
+                title: item['title'],
+                image_url: item['image_url']
+              },
+              created_at: item['created_at']
+            }
+          });
+          resolve(transformedData);
+      }
+      else {
+          console.error("Some error occurrd when retrieving s/w license NFTs. ", JSON.stringify(response));
+          reject(null);
+      }
+      }).catch(error => {
+        console.error("Some error occurrd when retrieving s/w license NFTs. ", error);
+        reject(null);
+      });
+  });
+}
+
 export default ({
     initiateWalletConnection: initiateWalletConnection,
-    mint: mint
+    mint: mint,
+    retrieveTokenOf: retrieveTokenOf
 })

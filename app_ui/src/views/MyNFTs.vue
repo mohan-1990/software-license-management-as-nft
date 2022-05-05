@@ -130,23 +130,6 @@
 		},
 	];
 
-	// "My SW License NFTs" table list of rows and their properties.
-	const mySWLicenseNFTsData = [
-    {
-        "key": 5,
-        "tokenId": 18,
-        "description": "Test Mint Token API Endpoint",
-		"ownerAddress": "0x0831242671918922AFeecbB4B1a37de6D21490d2",
-		"nft": {
-			"title": "Test Mint Token API Endpoint",
-			"image_url": "https://cdn.britannica.com/97/1597-004-05816F4E/Flag-India.jpg",
-		},
-        "created_at": "2022-04-25T08:38:34.179Z",
-        "updated_at": "2022-04-28T03:34:29.274Z",
-        "deletedAt": null
-    }
-];
-
 	export default ({
 		components: {
 			MySWLicenseNFTs,
@@ -161,7 +144,7 @@
 				account: '',
 				mySWLicenseNFTs: {
 					columns: mySWLicenseNFTsColumns,
-					data: mySWLicenseNFTsData
+					data: []
 				},
 				displayMintModal: false,
 				bus: new Vue(),
@@ -185,16 +168,26 @@
 			},
 			handleMintModalCancelBtnClick() {
 				console.log("Mint modal close button clicked.");
-			}
+				this.loadNFTs(this.account);
+			},
+			loadNFTs(owner) {
+				myNFTsController.retrieveTokenOf(owner).then((nfts) => {
+					console.log("Nfts: ", JSON.stringify(nfts));
+					this.mySWLicenseNFTs.data = nfts;
+				}).catch((error) => {
+					console.log(error);
+				});
+			},
 		},
 		mounted() {
 			this.bus.$on("mintParams", (args) => {
 				this.mintNewSoftwareLicenseNFT(args);
 			});
 			this.bus.$on("newNFTMintSuccess", () => {
-				setTimeout(() => {
-					this.displayMintModal = false;
-				}, 5000);
+				this.loadNFTs(this.account);
+			});
+			this.bus.$on("walletConnected", (args) => {
+				this.loadNFTs(args['account']);
 			});
 		},
 	})
