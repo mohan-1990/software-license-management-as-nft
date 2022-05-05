@@ -89,7 +89,7 @@ async function mint(to) {
     try {
         let tx = await contractInstance.mint(to, {from: accounts[0]});
         if (tx.logs[0].args[0] === zeroAddress && 
-            tx.logs[0].args[1] === to) {
+            tx.logs[0].args[1].toUpperCase() === to.toUpperCase()) {
                 response = tx.logs[0].args[2].toNumber();
             }
         else {

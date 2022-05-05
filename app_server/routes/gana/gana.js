@@ -68,7 +68,7 @@ async function create_NFT(app, route) {
 
             let newTokenId = await GanaMiddleware.mint(to);
 
-            if(newTokenId == -1 && newTokenId !== null) {
+            if(newTokenId == -1 || newTokenId === null) {
                 res.status(502);
                 res.send("Some error occured in blockchain gateway when minting new token for address: " + to + 
                 ". Please try again later or contact support if problem persists.");
