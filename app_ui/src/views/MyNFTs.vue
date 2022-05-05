@@ -69,11 +69,19 @@
 
 			<!-- Mint New Software License NFT modal window Column -->
 			<a-col :span="24" class="mb-24">
-				<a-modal v-model="displayMintModal" title="New Software License NFT Mint Form" 
-				@ok="handleMintModalOkBtnClick">
+				<a-modal v-model="displayMintModal" 
+				title="New Software License NFT Mint Form"
+				okText="Mint"
+				cancelText="Close"
+				:confirmLoading="confirmMinting"
+				@ok="handleMintModalOkBtnClick"
+				@cancel="handleMintModalCancelBtnClick"
+				:destroyOnClose="mintModalDestroyOnClose"
+				width="75vw"
+				wrapClassName="vertical-center-modal">
 					<CardMintSWLicenseNFTVue
 						:toAddress="account"
-						:onMintBtnClick="mintNewSoftwareLicenseNFT"
+						:bus="bus"
 					></CardMintSWLicenseNFTVue>
 				</a-modal>
 
@@ -87,7 +95,7 @@
 </template>
 
 <script>
-
+	import Vue from 'vue';
 	import myNFTsController from "../controllers/MyNFTsController";
 	// "My SW License NFTs" table component.
 	import MySWLicenseNFTs from '../components/Cards/CardSWLicenseNFTs';
@@ -155,7 +163,10 @@
 					columns: mySWLicenseNFTsColumns,
 					data: mySWLicenseNFTsData
 				},
-				displayMintModal: false
+				displayMintModal: false,
+				bus: new Vue(),
+				confirmMinting: false,
+				mintModalDestroyOnClose: true,
 			}
 		},
 		methods: {
@@ -163,18 +174,52 @@
 				await myNFTsController.initiateWalletConnection(this);
 			},
 			mintNewSoftwareLicenseNFT(params) {
-				myNFTsController.mint(params);
+				myNFTsController.mint(params, this);
 			},
 			mintBtnHandler() {
 				this.displayMintModal = true;
 			},
 			handleMintModalOkBtnClick() {
 				console.log("Mint modal ok button clicked.");
+				this.bus.$emit("emitMintParams");
 			},
-		}
+			handleMintModalCancelBtnClick() {
+				console.log("Mint modal close button clicked.");
+			}
+		},
+		mounted() {
+			this.bus.$on("mintParams", (args) => {
+				this.mintNewSoftwareLicenseNFT(args);
+			});
+			this.bus.$on("newNFTMintSuccess", () => {
+				setTimeout(() => {
+					this.displayMintModal = false;
+				}, 5000);
+			});
+		},
 	})
 
 </script>
 
 <style lang="scss">
+/* use css to set position of modal */
+.vertical-center-modal {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.vertical-center-modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  width: 0;
+}
+
+.vertical-center-modal .ant-modal {
+  display: inline-block;
+  vertical-align: middle;
+  top: 0;
+  text-align: left;
+}
 </style>
