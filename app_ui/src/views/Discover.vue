@@ -72,9 +72,11 @@
 		<a-row :gutter="24" type="flex" align="stretch">
 			<a-col :span="24" :xl="14" class="mb-24">
 
-				<!-- Information Card 1 -->
-				<CardInfo></CardInfo>
-				<!-- / Information Card 1 -->
+				<!-- NFT Card -->
+				<CardNFT
+				:data="nftCardData"
+				></CardNFT>
+				<!-- / NFT Card -->
 
 			</a-col>
 			<a-col :span="24" :xl="10" class="mb-24">
@@ -107,8 +109,8 @@
 	// Order History card component.
 	import CardOrderHistory from '../components/Cards/CardOrderHistory' ;
 
-	// Information card 1.
-	import CardInfo from '../components/Cards/CardInfo' ;
+	// NFT Card
+	import CardNFT from '../components/Cards/CardNFT';
 
 	// Information card 2.
 	import CardInfo2 from '../components/Cards/CardInfo2' ;
@@ -263,6 +265,26 @@
 		},
 	];
 
+	const nftCardData = [{
+		key: 0,
+		title: "The Best of the Literary Internet",
+		description: "Reprinted by permission of Mariner Books, an imprint of HarperCollins Publishers.",
+		tokenId: 3,
+		owner: "0x9e0d5148e7f9e6ff22b6e91ee843e2544ecbea22",
+		created_at: "2022-05-05T12:53:16.936Z"
+	}];
+
+	const nftCardColumns = [{
+		title: 'TOKEN ID',
+		dataIndex: 'name',
+		class: 'font-semibold text-muted',
+	},
+	{
+		title: 'OWNER ADDRESS',
+		dataIndex: 'value',
+		class: 'font-semibold text-muted',
+	}];
+
 	export default ({
 		components: {
 			CardBarChart,
@@ -270,8 +292,8 @@
 			WidgetCounter,
 			CardProjectTable,
 			CardOrderHistory,
-			CardInfo,
 			CardInfo2,
+			CardNFT,
 		},
 		data() {
 			return {
@@ -284,6 +306,11 @@
 
 				// Counter Widgets Stats
 				stats,
+
+				// NFT Card Data
+				nftCardData,
+				// NFT Card Columns
+				nftCardColumns,
 			}
 		},
 	})
