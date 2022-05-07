@@ -51,6 +51,23 @@ async function init(app, routePrefix) {
     });
 
     await requestTokenTransfer(app, route);
+
+    route = routePrefix + tokenName + '/transfercount';
+    availableRoutes.push({
+        path: route + '?id=',
+        method: 'GET'
+    });
+
+
+    await retrieveTransferCount(app, route);
+
+    route = routePrefix + tokenName + '/transferhistory';
+    availableRoutes.push({
+        path: route + '?id=',
+        method: 'GET'
+    });
+
+    await retrieveTransferHistory(app, route);
     
     console.log("Routes for token gana iniitialized.");
     console.log("Available routes: " + JSON.stringify(availableRoutes));
@@ -147,6 +164,40 @@ async function requestTokenTransfer(app, route) {
             let response = await PendingTransfer.create(db_context.models.gana['PendingTransfer'], params);
             res.status(200);
             res.send("The owner of the license token is notified. Please wait for the owner to initiate license token transfer. Maximun wait days: 2");
+        }
+        else {
+            res.status(200);
+            res.send("Token id: " + tokenId + " not found. Please try again with a valid token id.");
+        }  
+    });
+}
+
+async function retrieveTransferCount(app, route) {
+    app.get(route, async function(req,res) {
+        let tokenId = req.query['id'];
+        let NFT_ = await NFT.read(db_context.models.gana['NFT'], tokenId);
+        if(NFT_ !== undefined) {
+            
+            let transferCount = await GanaMiddleware.retrieveTransferCounts(tokenId);
+            res.status(200);
+            res.send(String(transferCount));
+        }
+        else {
+            res.status(200);
+            res.send("Token id: " + tokenId + " not found. Please try again with a valid token id.");
+        }  
+    });
+}
+
+async function retrieveTransferHistory(app, route) {
+    app.get(route, async function(req,res) {
+        let tokenId = req.query['id'];
+        let NFT_ = await NFT.read(db_context.models.gana['NFT'], tokenId);
+        if(NFT_ !== undefined) {
+            
+            let transferHistory = await GanaMiddleware.retrieveTransferHistory(tokenId);
+            res.status(200);
+            res.send(transferHistory);
         }
         else {
             res.status(200);

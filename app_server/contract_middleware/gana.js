@@ -64,12 +64,14 @@ async function retrieveTransferHistory(tokenId) {
     try {
         let trasferHistory = await contractInstance.retrieveTransferHistory(tokenId, {from: accounts[0]});
         response = {
-            timeStamp: [],
+            dateTime: [],
             to: []
         };
 
         for(let i=0; i<trasferHistory.timeStamp.length; ++i){
-            response['timeStamp'].push(trasferHistory.timeStamp[i].toNumber());
+            let timeStamp = trasferHistory.timeStamp[i].toNumber();
+            let dateTime = new Date(timeStamp * 1000);
+            response['dateTime'].push(dateTime);
         }
 
         response['to'] = trasferHistory.to;
