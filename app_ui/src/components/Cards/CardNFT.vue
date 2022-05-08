@@ -59,7 +59,7 @@
 			</a-col>
 		</a-row>
 		<a-row type="flex">
-			<a-col class="col-content" :span="24" :xl="12" style="margin-top: 20px; margin-right: 0">
+			<a-col class="col-content" :span="12" :xl="6" style="margin-top: 20px; margin-right: 15px">
 				<a-button type="primary" 
 				:loading="isOwnershipHistoryLoading"
 				@click="onOwnershipHistoryBtnClick">
@@ -81,9 +81,7 @@
 						</a-timeline>
 				</a-drawer>
 			</a-col>
-		</a-row>
-		<a-row type="flex">
-			<a-col class="col-content" :span="24" :xl="12" style="margin-top: 20px; margin-right: 0">
+			<a-col class="col-content" :span="12" :xl="6" style="margin-top: 20px; margin-right: 0">
 				<a-button type="primary" style="background-color: #52C41A; border-color: #52C41A">
 					Request Token Transfer
 				</a-button>
