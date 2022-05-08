@@ -25,7 +25,7 @@
 					<a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
 						<a-button type="primary" @click="initiateWalletConnection" :disabled="isWalletConnected">
 								CONNECT TO WALLET
-							</a-button>
+						</a-button>
 					</a-col>
 				</a-row>
 				<a-row type="flex" align="middle">

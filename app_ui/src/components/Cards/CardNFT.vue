@@ -7,7 +7,7 @@
 					<img src="images/info-card-1.jpg" alt="">
 				</div>
 			</a-col>
-			<a-col class="col-content" :span="24" :xl="12" style="margin-left: 20px">
+			<a-col class="col-content" :span="24" :xl="12" style="margin-left: 20px; margin-right: 0">
 				<div class="card-content">
 					<a-list item-layout="vertical" 
 					:split="false" 
@@ -21,57 +21,72 @@
 									<h6 class="text-sm">{{ item.description }}</h6>
 								</template>
 							</a-list-item-meta>
-							<a-row type="flex" align="middle">
-								<a-col :span="24" :md="12">
-									<a-tag color="#B37FEB">{{item.owner}}</a-tag>
-								</a-col>
-							</a-row>
-							<a-row type="flex" align="middle">
-								<a-col :span="24" :md="12">
-									<a-tag color="#52C41A">{{item.created_at}}</a-tag>
-								</a-col>
-							</a-row>
+							<div clas="ant-table-wrapper">
+								<div class="ant-table ant-table-scroll-position-left ant-table-default">
+									<div class="ant-table-content">
+										<div class="ant-table-body">
+											<table class="">
+												<tbody class="ant-table-tbody">
+													<tr class="ant-table-row ant-table-row-level-0">
+														<td class="ant-table-row-cell-break-word" style="padding: 5px">
+															<h6 class="font-semibold" style="color: #141414">
+																Owner
+															</h6>
+														</td>
+														<td class="ant-table-row-cell-break-word" style="padding: 5px">
+															{{item.owner}}
+														</td>
+													</tr>
+													<tr class="ant-table-row ant-table-row-level-0">
+														<td class="ant-table-row-cell-break-word" style="padding: 5px">
+															<h6 class="font-semibold" style="color: #141414">
+																Minted At
+															</h6>
+														</td>
+														<td class="ant-table-row-cell-break-word" style="padding: 5px">
+															{{item.created_at}}
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
 						</a-list-item>
 					</a-list>
 				</div>
 			</a-col>
 		</a-row>
 		<a-row type="flex">
-			<a-col class="col-content" :span="24" :xl="12" style="margin-top: 20px">
-				<a-collapse expandIconPosition="right">
-					<a-collapse-panel key="1">
-						<template #header>
-							<span>Ownership history</span>
-						</template>
-						<a-timeline pending="Recording...">
-							<a-timeline-item color="green">
-								$2,400 - Redesign store
-								<p>09 JUN 7:20 PM</p>
-							</a-timeline-item>
-							<a-timeline-item color="green">
-								New order #3654323
-								<p>08 JUN 12:20 PM</p>
-							</a-timeline-item>
-							<a-timeline-item color="blue">
-								Company server payments 
-								<p>04 JUN 3:10 PM</p>
-							</a-timeline-item>
-							<a-timeline-item color="blue">
-								New card added for order #4826321
-								<p>02 JUN 2:45 PM</p>
-							</a-timeline-item>
-							<a-timeline-item color="blue">
-								Unlock folders for development
-								<p>18 MAY 1:30 PM</p>
-							</a-timeline-item>
-							<a-timeline-item color="gray">
-								New order #46282344
-								<p>14 MAY 3:30 PM</p>
-							</a-timeline-item>
-							<template #pendingDot> </template>
+			<a-col class="col-content" :span="24" :xl="12" style="margin-top: 20px; margin-right: 0">
+				<a-button type="primary" 
+				:loading="isOwnershipHistoryLoading"
+				@click="onOwnershipHistoryBtnClick">
+					Ownership History
+				</a-button>
+				<a-drawer
+					title="Ownership history"
+					:width="480"
+					:visible="isDrawerVisible"
+					:body-style="{ padding: '80px' }"
+					@close="onDrawerClose"
+				>
+					<a-timeline>
+							<a-timeline-item v-for="item in ownershipHistory" :key="item.index" 
+							color="green">
+							{{ item.to }}
+							<p>{{ item.dateTime }}</p>
+						</a-timeline-item>
 						</a-timeline>
-					</a-collapse-panel>
-				</a-collapse>
+				</a-drawer>
+			</a-col>
+		</a-row>
+		<a-row type="flex">
+			<a-col class="col-content" :span="24" :xl="12" style="margin-top: 20px; margin-right: 0">
+				<a-button type="primary" style="background-color: #52C41A; border-color: #52C41A">
+					Request Token Transfer
+				</a-button>
 			</a-col>
 		</a-row>
 	</a-card>
@@ -80,21 +95,45 @@
 
 <script>
 
+	import discoverController from '../../controllers/DiscoverController';
+
 	export default ({
 		props: {
 			data: {
 				type: Array,
 				default: () => [],
 			},
-			ownership: {
-				type: Array,
-				default: () => [],
-			},
 		},
 		data() {
 			return {
+				isDrawerVisible: false,
+				isOwnershipHistoryLoading: false,
+				tokenId: -1,
+				ownershipHistory: [],
 			}
 		},
+		methods: {
+			onDrawerClose() {
+				this.isDrawerVisible = false;
+			},
+			onOwnershipHistoryBtnClick() {
+				if(this.tokenId !== -1) {
+					this.isOwnershipHistoryLoading = true;
+					discoverController.retrieveTokenOwnershipHistory(this.tokenId)
+					.then((response) => {
+						this.ownershipHistory = response;
+						this.isOwnershipHistoryLoading = false;
+						this.isDrawerVisible = true;
+					}).catch((error) => {
+						this.isOwnershipHistoryLoading = false;
+						console.error(error);
+					});
+				}
+			}
+		},
+		mounted() {
+			this.tokenId = (this.data.length > 0) ? this.data[0].tokenId : -1;
+		}
 	})
 
 </script>
