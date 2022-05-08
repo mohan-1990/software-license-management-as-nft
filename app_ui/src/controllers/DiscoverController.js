@@ -28,6 +28,32 @@ function retrieveTokenOwnershipHistory(tokenId) {
   });
 }
 
+function retrieveNFTs() {
+  return new Promise((resolve, reject) => {
+    console.log("DiscoverController -> retrieveNFTs function called");
+    const nftsAPI = process.env.VUE_APP_TOKEN_GANA_API + '/tokens';
+    axios.get(nftsAPI).then(response => {
+      if(response.status == 200 && typeof(response.data) === typeof({})) {
+          let nfts = [];
+          for(let i=0; i<response.data.length; ++i) {
+            let nft = [];
+            nft.push(response.data[i]);
+            nfts.push(nft);
+          }
+          resolve(nfts);
+      }
+      else {
+          console.error("Some error occurrd when retrieving nfts. ", JSON.stringify(response));
+          reject(null);
+      }
+      }).catch(error => {
+        console.error("Some error occurrd when retrieving nfts. ", error);
+        reject(null);
+      });
+  });
+}
+
 export default ({
-    retrieveTokenOwnershipHistory: retrieveTokenOwnershipHistory
+    retrieveTokenOwnershipHistory: retrieveTokenOwnershipHistory,
+    retrieveNFTs: retrieveNFTs
 })

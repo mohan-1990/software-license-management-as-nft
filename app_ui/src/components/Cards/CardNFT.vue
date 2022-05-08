@@ -3,8 +3,8 @@
 	<a-card :bordered="false" class="card-info">
 		<a-row type="flex">
 			<a-col class="col-img" :span="24" :xl="12">
-				<div class="card-img-bg">
-					<img src="images/info-card-1.jpg" alt="">
+				<div class="card-img-bg" style="width: 200px; height: 200px;">
+					<img :src="data[0].image_url" alt="">
 				</div>
 			</a-col>
 			<a-col class="col-content" :span="24" :xl="12" style="margin-left: 20px; margin-right: 0">
@@ -28,18 +28,18 @@
 											<table class="">
 												<tbody class="ant-table-tbody">
 													<tr class="ant-table-row ant-table-row-level-0">
-														<td class="ant-table-row-cell-break-word" style="padding: 5px">
-															<h6 class="font-semibold" style="color: #141414">
+														<td class="ant-table-row-cell-break-word" style="padding: 5px; width: 25%;">
+															<h6 class="font-semibold" style="color: #141414;">
 																Owner
 															</h6>
 														</td>
 														<td class="ant-table-row-cell-break-word" style="padding: 5px">
-															{{item.owner}}
+															{{item.ownerAddress}}
 														</td>
 													</tr>
 													<tr class="ant-table-row ant-table-row-level-0">
-														<td class="ant-table-row-cell-break-word" style="padding: 5px">
-															<h6 class="font-semibold" style="color: #141414">
+														<td class="ant-table-row-cell-break-word" style="padding: 5px; width: 25%;">
+															<h6 class="font-semibold" style="color: #141414;">
 																Minted At
 															</h6>
 														</td>
