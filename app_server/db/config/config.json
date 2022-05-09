@@ -1,0 +1,14 @@
+{
+  "development": {
+    "dialect": "sqlite",
+    "storage": "/home/mohan/Work/Eth/gana-1/software-license-management-as-nft/app_server/db/gana.sqlite3"
+  },
+  "test": {
+    "dialect": "sqlite",
+    "storage": "/home/mohan/Work/Eth/gana-1/software-license-management-as-nft/app_server/db/gana.sqlite3"
+  },
+  "production": {
+    "dialect": "sqlite",
+    "storage": "/home/mohan/Work/Eth/gana-1/software-license-management-as-nft/app_server/db/gana.sqlite3"
+  }
+}

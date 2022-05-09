@@ -28,6 +28,14 @@ async function init(db_gana) {
         title: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        price: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        currency: {
+            type: DataTypes.STRING,
+            allowNull: false
         }
       }, {
         tableName: 'NFT',
@@ -53,7 +61,9 @@ async function create(NFT, params) {
         ownerAddress: params['ownerAddress'],
         description: params['description'],
         image_url: params['image_url'],
-        title: params['title']
+        title: params['title'],
+        price: params['price'],
+        currency: params['currency']
     });
 
     console.log("New NFT: " + params['tokenId'] + " created successfully.");

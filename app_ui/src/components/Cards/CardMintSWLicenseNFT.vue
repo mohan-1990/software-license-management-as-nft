@@ -31,6 +31,18 @@
 							{ rules: [{ required: true, message: 'Please input the description of the software license NFT token!' }] },
 							]" placeholder="description" />
 						</a-form-item>
+						<a-form-item class="mb-5" label="Price (INR)" :colon="false">
+							<a-input type="number"
+							v-decorator="[
+							'price',
+							{ rules: [{ required: true, 
+										message: 'Please input the price of the software license NFT token! ' 
+									},{ 
+										validator: priceValidator 
+									}]
+							},
+							]" placeholder="price" />
+						</a-form-item>
 						<a-form-item class="mb-10">
 							<a-upload-dragger
 								name="nft_image"
@@ -118,6 +130,13 @@
 					this.msgToUserVisible = true;
 				}
 			},
+			priceValidator(rule, value, callback) {
+				const { getFieldValue } = this.form;
+				if (value < 200) {
+					callback('Please set minimum price of INR 200!')
+				}
+				callback();
+			},
 		},
 		beforeCreate() {
 			// Creates the form and adds to it component's "form" property.
@@ -141,7 +160,8 @@
 							toAddress: this.toAddress,
 							title: values['title'],
 							description: values['description'],
-							image_url: this.imagePreviewSrc
+							image_url: this.imagePreviewSrc,
+							price: values['price']
 						};
 						this.bus.$emit('mintParams', params);
 					}
@@ -156,7 +176,8 @@
 		},
 		mounted() {
 			this.form.setFieldsValue({
-				toAddress: this.toAddress
+				toAddress: this.toAddress,
+				price: 200
 			});
 		},
 	})

@@ -79,9 +79,10 @@ async function create_NFT(app, route) {
         let description = req.body.description;
         let image_url = req.body.image_url;
         let title = req.body.title;
+        let price = req.body.price;
         
         if (to != "" && description != "" && image_url != "" &&
-        title != "") {
+        title != "" && price != "") {
 
             let newTokenId = await GanaMiddleware.mint(to);
 
@@ -96,7 +97,9 @@ async function create_NFT(app, route) {
                     ownerAddress: to,
                     description: description,
                     image_url: image_url,
-                    title: title
+                    title: title,
+                    price: price,
+                    currency :'INR' // Only supported currency code as of now
                 };
                 let response = await NFT.create(db_context.models.gana['NFT'], params);
     
