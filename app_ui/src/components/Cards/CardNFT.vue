@@ -101,6 +101,12 @@
 
 </template>
 
+<style lang="scss">
+ .ant-list-item {
+	 padding: 0;
+ }
+</style>
+
 <script>
 
 	import discoverController from '../../controllers/DiscoverController';
