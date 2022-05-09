@@ -39,6 +39,10 @@
 				<p>{{description}}</p>
 			</template>
 
+			<template slot="price" slot-scope="price">
+				<p>{{price}}</p>
+			</template>
+
 			<template slot="created_at" slot-scope="created_at">
 				<p>{{created_at}}</p>
 			</template>

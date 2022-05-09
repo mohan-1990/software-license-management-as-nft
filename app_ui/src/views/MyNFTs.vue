@@ -124,6 +124,11 @@
 			class: 'font-semibold text-muted',
 		},
 		{
+			title: 'PRICE',
+			dataIndex: 'price',
+			class: 'font-semibold text-muted',
+		},
+		{
 			title: 'CREATED AT',
 			scopedSlots: { customRender: 'created_at' },
 			dataIndex: 'created_at',

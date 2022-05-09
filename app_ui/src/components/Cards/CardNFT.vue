@@ -47,6 +47,16 @@
 															{{item.created_at}}
 														</td>
 													</tr>
+													<tr class="ant-table-row ant-table-row-level-0">
+														<td class="ant-table-row-cell-break-word" style="padding: 5px; width: 25%;">
+															<h6 class="font-semibold" style="color: #141414;">
+																Price
+															</h6>
+														</td>
+														<td class="ant-table-row-cell-break-word" style="padding: 5px">
+															{{item.currency}}&nbsp;{{item.price}}
+														</td>
+													</tr>
 												</tbody>
 											</table>
 										</div>

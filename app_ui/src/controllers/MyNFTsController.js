@@ -110,6 +110,7 @@ function retrieveTokenOf(owner) {
                 title: item['title'],
                 image_url: item['image_url']
               },
+              price: item['currency'] + ' ' + item['price'],
               created_at: item['created_at']
             }
           });
