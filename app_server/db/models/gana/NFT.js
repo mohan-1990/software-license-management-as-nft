@@ -88,11 +88,13 @@ async function read(NFT, tokenId) {
     }
 }
 
-async function read2(NFT, ownerAddress) {
+async function read2(NFT, ownerAddress, orderDirection='DESC') {
     const nft = await NFT.findAll({
-        where: {
-            ownerAddress: ownerAddress
-        }
+        where: Sequelize.where(Sequelize.fn('lower', Sequelize.col('ownerAddress')),
+        Sequelize.fn('lower', ownerAddress)),
+        order: [
+            ['created_at', orderDirection]
+        ]
     });
 
     console.log("Read by owner address: " + ownerAddress + ". Result: " + JSON.stringify(nft));
@@ -105,8 +107,12 @@ async function read2(NFT, ownerAddress) {
     }
 }
 
-async function read3(NFT) {
-    const nft = await NFT.findAll();
+async function read3(NFT, orderDirection='DESC') {
+    const nft = await NFT.findAll({
+        order: [
+            ['created_at', orderDirection]
+        ]
+    });
 
     console.log("Read all Result: " + JSON.stringify(nft));
 
