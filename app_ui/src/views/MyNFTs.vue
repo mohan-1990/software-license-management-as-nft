@@ -22,11 +22,11 @@
 							</a-tag>
 						</div>
 					</a-col>
-					<a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
+					<!-- <a-col :span="24" :md="12" style="display: flex; align-items: center; justify-content: flex-end">
 						<a-button type="primary" @click="initiateWalletConnection" :disabled="isWalletConnected">
 								CONNECT TO WALLET
 						</a-button>
-					</a-col>
+					</a-col> -->
 				</a-row>
 				<a-row type="flex" align="middle">
 					<a-descriptions :column="1" :style="{visibility: isWalletConnected ? 'visible' : 'hidden'}">
@@ -142,11 +142,11 @@
 		},
 		data() {
 			return {
-				walletName: "",
-				isWalletConnected: false,
+				walletName: localStorage.walletName,
+				isWalletConnected: localStorage.isWalletConnected,
 				walletImageSrc: "images/crypto-wallet.png",
-				networkId: '',
-				account: '',
+				networkId: localStorage.networkId,
+				account: localStorage.account,
 				mySWLicenseNFTs: {
 					columns: mySWLicenseNFTsColumns,
 					data: []
@@ -184,7 +184,7 @@
 				});
 			},
 		},
-		mounted() {
+		async mounted() {
 			this.bus.$on("mintParams", (args) => {
 				this.mintNewSoftwareLicenseNFT(args);
 			});
@@ -194,6 +194,13 @@
 			this.bus.$on("walletConnected", (args) => {
 				this.loadNFTs(args['account']);
 			});
+
+			if(this.isWalletConnected === true) {
+				this.loadNFTs(this.account);
+			}
+			else {
+				await this.initiateWalletConnection();
+			}
 		},
 	})
 

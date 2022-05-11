@@ -152,9 +152,18 @@ async function read_NFTByOwnerAddress(app, route) {
 }
 
 async function requestTokenTransfer(app, route) {
-    app.post(route, async function(req,res) {
+    app.post(route, async function(req,res,next) {
         let tokenId = req.body.tokenId;
         let requesterAddress = req.body.requesterAddress;
+
+        if (requesterAddress === "" || requesterAddress === null 
+        || requesterAddress === undefined || tokenId === ""
+        || tokenId === undefined) {
+            res.status(400);
+            res.send("Invalid or missing parameters. Please try again with values for all fields.");
+            next();
+        }
+
         let NFT_ = await NFT.read(db_context.models.gana['NFT'], tokenId);
         if(NFT_ !== undefined) {
             let params = {

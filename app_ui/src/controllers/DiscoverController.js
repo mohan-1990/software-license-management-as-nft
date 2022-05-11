@@ -1,4 +1,5 @@
 import axios from "axios";
+import dashboardHeaderController from "./DashboardHeaderController";
 
 function retrieveTokenOwnershipHistory(tokenId) {
   return new Promise((resolve, reject) => {
@@ -53,7 +54,45 @@ function retrieveNFTs() {
   });
 }
 
+async function requestTokenTransfer($ctx, tokenId, title) {
+  console.log("requestTokenTransferfunction called for tokenId: " + tokenId);
+
+  $ctx.requestTransferModalTitle = 'Request transfer of token ' + title;
+  $ctx.isTransferRequestInProgress = true;
+
+  let account;
+  if(localStorage.isWalletConnected === true) {
+    account = localStorage.account;
+  }
+  else {
+    let walletInfo = await dashboardHeaderController.initiateWalletConnection();
+    account = walletInfo['account'];
+  }
+
+  const params = { tokenId: tokenId, requesterAddress: account };
+  const requestTokenTransferAPI = process.env.VUE_APP_TOKEN_GANA_API + '/reqtokentransfer';
+    axios.post(requestTokenTransferAPI, params).then(response => {
+      if(response.status == 200 && !(response.data.indexOf("not found") > 0)) {
+          $ctx.requestTransferModalType = 'success';
+      }
+      else {
+        $ctx.requestTransferModalType = 'error';
+      }
+      $ctx.requestTransferModalMessage = response.data;
+      $ctx.isTransferRequestInProgress = false;
+      $ctx.isRequestTransferModalVisible = true;
+  }).catch(error => {
+      let message = "Some error occurred in the server when requesting token transfer. Please check browser console for more details.";
+      $ctx.requestTransferModalType = 'error';
+      $ctx.requestTransferModalMessage = message;
+      $ctx.isTransferRequestInProgress = false;
+      $ctx.isRequestTransferModalVisible = true;
+      console.error(error);
+  });
+}
+
 export default ({
     retrieveTokenOwnershipHistory: retrieveTokenOwnershipHistory,
-    retrieveNFTs: retrieveNFTs
+    retrieveNFTs: retrieveNFTs,
+    requestTokenTransfer: requestTokenTransfer,
 })

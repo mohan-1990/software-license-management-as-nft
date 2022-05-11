@@ -92,11 +92,27 @@
 				</a-drawer>
 			</a-col>
 			<a-col class="col-content" :span="12" :xl="6" style="margin-top: 20px; margin-right: 0">
-				<a-button type="primary" style="background-color: #52C41A; border-color: #52C41A">
+				<a-button type="primary" style="background-color: #52C41A; border-color: #52C41A"
+				@click="requestTransferBtnClick">
 					Request Token Transfer
 				</a-button>
 			</a-col>
 		</a-row>
+
+		<a-modal :visible="isRequestTransferModalVisible" 
+		:title="requestTransferModalTitle"
+		:cancelButtonProps="transferRequestCancelBtnProps"
+		:confirmLoading="isTransferRequestInProgress"
+		okText="Close"
+		@ok="requestTransferModalOkBtnClick">
+			<a-result
+				:status="requestTransferModalType"
+				title="Token transfer request successful!"
+				:sub-title="requestTransferModalMessage"
+			>
+			</a-result>
+    	</a-modal>
+
 	</a-card>
 
 </template>
@@ -124,6 +140,12 @@
 				isOwnershipHistoryLoading: false,
 				tokenId: -1,
 				ownershipHistory: [],
+				isRequestTransferModalVisible: false,
+				requestTransferModalTitle: '',
+				requestTransferModalType: 'success',
+				requestTransferModalMessage: '',
+				isTransferRequestInProgress: false,
+				transferRequestCancelBtnProps: { style: { display: 'none' } },
 			}
 		},
 		methods: {
@@ -143,7 +165,15 @@
 						console.error(error);
 					});
 				}
-			}
+			},
+			requestTransferModalOkBtnClick() {
+				this.isRequestTransferModalVisible = false;
+			},
+			async requestTransferBtnClick() {
+				if(this.tokenId != -1) {
+					await discoverController.requestTokenTransfer(this, this.tokenId, this.data[0].title);
+				}
+			},
 		},
 		mounted() {
 			this.tokenId = (this.data.length > 0) ? this.data[0].tokenId : -1;

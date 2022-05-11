@@ -1,47 +1,22 @@
 import axios from "axios";
-
-function isWalletInstalled() {
-    //Have to check the ethereum binding on the window object to see if it's installed
-    const { ethereum } = window;
-    return Boolean(ethereum);
-}
-
-function isMetamaskInstalled() {
-    //Have to check the ethereum binding on the window object to see if it's installed
-    const { ethereum } = window;
-    return Boolean(ethereum.isMetaMask);
-}
+import dashboardHeaderController from "./DashboardHeaderController";
 
 async function initiateWalletConnection($ctx) {
     try {
-      if(isWalletInstalled()) {
-          if(isMetamaskInstalled()) {
-            $ctx.walletName = "Metamask";
-          }
-          else {
-            $ctx.walletName = "Unknown wallet";
-          }
-      }
-      
-      await ethereum.request({ method: 'eth_requestAccounts' });
-      let account = await getPrimaryAccount();
-      $ctx.account = account;
-      $ctx.networkId = window.ethereum.networkVersion;
-      $ctx.isWalletConnected = true;
+      let walletInfo = await dashboardHeaderController.initiateWalletConnection();
+      $ctx.account = walletInfo['account'];
+      $ctx.networkId = walletInfo['networkId'];
+      $ctx.isWalletConnected = walletInfo['isWalletConnected'];
+      $ctx.walletName = walletInfo['walletName'];
 
       $ctx.bus.$emit('walletConnected', {
-        account: account,
-        networkId: window.ethereum.networkVersion
+        account: walletInfo['account'],
+        networkId: walletInfo['networkId']
       });
 
     } catch (error) {
-      console.error("Some error when intiating connection with metamask: ", error);
+      console.error(error);
     }
-};
-
-async function getPrimaryAccount() {
-    const accounts = await ethereum.request({ method: 'eth_accounts' });
-    return accounts[0];
 }
 
 function mint(params, $ctx) {
