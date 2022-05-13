@@ -29,7 +29,8 @@
 
 				<!-- NFT Card -->
 				<CardNFT
-				:data="nft"
+				:nft="nft"
+				:pendingTransfer="computePendingTransfer(nft[0].tokenId)"
 				></CardNFT>
 
 			</a-col>
@@ -48,6 +49,7 @@
 	// NFT Card
 	import CardNFT from '../components/Cards/CardNFT';
 	import discoverController from '../controllers/DiscoverController';
+	import dashboardHeaderController from '../controllers/DashboardHeaderController';
 
 	// Counter Widgets stats
 	const stats = [
@@ -132,16 +134,41 @@
 				// NFT Card Columns
 				nftCardColumns,
 				nfts: [],
+				pendingTransfers: [],
 			}
 		},
-		mounted() {
-			discoverController.retrieveNFTs().then((nfts) => {
-				this.nfts = nfts;
+		methods: {
+			computePendingTransfer(tokenId) {
+				return this.pendingTransfers.includes(tokenId);
+			}
+		},
+		async mounted() {
+
+			let account;
+
+			if(localStorage.isWalletConnected === true) {
+				account = localStorage.account;
+			}
+			else {
+				let walletInfo = await dashboardHeaderController.initiateWalletConnection();
+				account = walletInfo['account'];
+			}
+
+			discoverController.retrievePendingTransfers(account).then((pendingTransfers) => {
+				this.pendingTransfers = pendingTransfers;
+				
+				discoverController.retrieveNFTs().then((nfts) => {
+					this.nfts = nfts;
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+
 			})
 			.catch((error) => {
 				console.error(error);
-			})
-		}
+			});
+		},
 	})
 
 </script>

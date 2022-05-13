@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
+const { Sequelize, DataTypes, Model, Op } = require('sequelize');
 
 async function init(db_gana) {
     const PendingTransfer = db_gana.define('PendingTransfer', {
@@ -53,22 +53,14 @@ async function create(PendingTransfer, params) {
     return pendingTransfer;
 }
 
-async function read(PendingTransfer, tokenId) {
+async function read(PendingTransfer, field, address) {
     const pendingTransfer = await PendingTransfer.findAll({
-        where: {
-            tokenId: tokenId
-        },
-        limit: 1
+        where: Sequelize.where(Sequelize.fn('lower', Sequelize.col(field)),
+        Sequelize.fn('lower', address))
     });
 
-    console.log("Pending Trasfer Read by tokenId: " + tokenId + ". Result: " + JSON.stringify(pendingTransfer));
-
-    if(pendingTransfer instanceof Array) {
-        return pendingTransfer[0];
-    }
-    else {
-        return undefined;
-    }
+    console.log("Read Pending Transfer where : " + field + " = " + address + " " + JSON.stringify(pendingTransfer));
+    return pendingTransfer;
 }
 
 async function update(PendingTransfer, tokenId, message) {

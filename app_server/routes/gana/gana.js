@@ -68,6 +68,14 @@ async function init(app, routePrefix) {
     });
 
     await retrieveTransferHistory(app, route);
+
+    route = routePrefix + tokenName + '/pendingtransfers';
+    availableRoutes.push({
+        path: route + '?address=&filterby=',
+        method: 'GET'
+    });
+
+    await retrievePendingTransfers(app, route);
     
     console.log("Routes for token gana iniitialized.");
     console.log("Available routes: " + JSON.stringify(availableRoutes));
@@ -214,6 +222,54 @@ async function retrieveTransferHistory(app, route) {
         else {
             res.status(200);
             res.send("Token id: " + tokenId + " not found. Please try again with a valid token id.");
+        }  
+    });
+}
+
+async function retrievePendingTransfers(app, route) {
+    app.get(route, async function(req,res, next) {
+        let address = req.query['address'];
+        let filterBy = req.query['filterby'];
+        let returnFields = req.query['returnfields'];
+
+        let pendingTransferFields = Object.keys(db_context.models.gana['PendingTransfer'].rawAttributes);
+
+        if(address === "" || address === null || address === undefined ||
+        filterBy === "" || filterBy === null || filterBy === undefined) {
+            res.status(400);
+            res.send("Missing query parameters." +
+            "Please try again with values for address and filterby query parameters.");
+            next();
+        }
+        if(!filterBy in pendingTransferFields) {
+            res.status(400);
+            res.send("Invalid query parameter value for filterBy." +
+            "Please try again with one of the allowed values [owner, requester]");
+            next();
+        }
+
+        let pendingTransfers = await PendingTransfer.read(db_context.models.gana['PendingTransfer'], 
+        filterBy, address);
+        console.log("Return fields 1:- " + returnFields);
+        if(returnFields !== null && returnFields !== undefined) {
+            console.log("Return fields 2:- " + returnFields);
+            let response = [];
+            returnFields = returnFields.split(',');
+            let validReturnFields = returnFields.filter(x => pendingTransferFields.includes(x));
+
+            for(let i=0; i<pendingTransfers.length; ++i) {
+                let pendingTransfer = {};
+                for(let j=0; j<validReturnFields.length; ++j) {
+                    pendingTransfer[validReturnFields[j]] = pendingTransfers[i][validReturnFields[j]];
+                }
+                response.push(pendingTransfer);
+            }
+            res.status(200);
+            res.send(response);
+        }
+        else {
+            res.status(200);
+            res.send(pendingTransfers);
         }  
     });
 }

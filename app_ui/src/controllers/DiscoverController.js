@@ -81,13 +81,35 @@ async function requestTokenTransfer($ctx, tokenId, title) {
       $ctx.requestTransferModalMessage = response.data;
       $ctx.isTransferRequestInProgress = false;
       $ctx.isRequestTransferModalVisible = true;
+      $ctx.pendingTransferRequestSuccessful = true;
   }).catch(error => {
       let message = "Some error occurred in the server when requesting token transfer. Please check browser console for more details.";
       $ctx.requestTransferModalType = 'error';
       $ctx.requestTransferModalMessage = message;
       $ctx.isTransferRequestInProgress = false;
       $ctx.isRequestTransferModalVisible = true;
+      $ctx.pendingTransferRequestSuccessful = false;
       console.error(error);
+  });
+}
+
+function retrievePendingTransfers(account) {
+  return new Promise((resolve, reject) => {
+    console.log("retrievePendingTransfers called for account: " + account);
+
+    const pendingTransfersAPI = process.env.VUE_APP_TOKEN_GANA_API + '/pendingtransfers?address=' + account + 
+    '&filterby=requesterAddress&returnfields=tokenId';
+      axios.get(pendingTransfersAPI).then(response => {
+        if(response.status === 200) {
+            let pendingTransferTokenIds = [].concat(response.data.map(x => x.tokenId));
+            console.log("Pending transfer token ids: " + JSON.stringify(pendingTransferTokenIds));
+            resolve(pendingTransferTokenIds);
+        }
+    }).catch(error => {
+        let message = "Some error occurred in the server when requesting pending token transfers. Please check browser console for more details.";
+        console.error(message, error);
+        reject(null);
+    });
   });
 }
 
@@ -95,4 +117,5 @@ export default ({
     retrieveTokenOwnershipHistory: retrieveTokenOwnershipHistory,
     retrieveNFTs: retrieveNFTs,
     requestTokenTransfer: requestTokenTransfer,
+    retrievePendingTransfers: retrievePendingTransfers,
 })

@@ -4,14 +4,14 @@
 		<a-row type="flex">
 			<a-col class="col-img" :span="24" :xl="12">
 				<div class="card-img-bg" style="width: 200px; height: 200px;">
-					<img :src="data[0].image_url" alt="">
+					<img :src="nft[0].image_url" alt="">
 				</div>
 			</a-col>
 			<a-col class="col-content" :span="24" :xl="12" style="margin-left: 20px; margin-right: 0">
 				<div class="card-content">
 					<a-list item-layout="vertical" 
 					:split="false" 
-					:data-source="data">
+					:data-source="nft">
 						<a-list-item slot="renderItem" slot-scope="item">
 							<a-list-item-meta>
 								<template #title>
@@ -93,8 +93,9 @@
 			</a-col>
 			<a-col class="col-content" :span="12" :xl="6" style="margin-top: 20px; margin-right: 0">
 				<a-button type="primary" style="background-color: #52C41A; border-color: #52C41A"
-				@click="requestTransferBtnClick">
-					Request Token Transfer
+				@click="requestTransferBtnClick"
+				v-bind:disabled="pendingTransferFlag">
+					{{requestTransferBtnLabel}}
 				</a-button>
 			</a-col>
 		</a-row>
@@ -129,9 +130,13 @@
 
 	export default ({
 		props: {
-			data: {
+			nft: {
 				type: Array,
 				default: () => [],
+			},
+			pendingTransfer: {
+				type: Boolean,
+				default: () => false,
 			},
 		},
 		data() {
@@ -146,6 +151,7 @@
 				requestTransferModalMessage: '',
 				isTransferRequestInProgress: false,
 				transferRequestCancelBtnProps: { style: { display: 'none' } },
+				pendingTransferRequestSuccessful: false
 			}
 		},
 		methods: {
@@ -171,12 +177,25 @@
 			},
 			async requestTransferBtnClick() {
 				if(this.tokenId != -1) {
-					await discoverController.requestTokenTransfer(this, this.tokenId, this.data[0].title);
+					await discoverController.requestTokenTransfer(this, this.tokenId, this.nft[0].title);
 				}
 			},
 		},
 		mounted() {
-			this.tokenId = (this.data.length > 0) ? this.data[0].tokenId : -1;
+			this.tokenId = (this.nft.length > 0) ? this.nft[0].tokenId : -1;
+		},
+		computed: {
+			requestTransferBtnLabel() {
+				if(this.pendingTransfer || this.pendingTransferRequestSuccessful) {
+					return "Pending Transfer";
+				}
+				else {
+					return "Request Transfer";
+				}
+			},
+			pendingTransferFlag() {
+				return this.pendingTransfer || this.pendingTransferRequestSuccessful;
+			}
 		}
 	})
 
