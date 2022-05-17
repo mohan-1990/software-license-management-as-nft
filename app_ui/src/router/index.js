@@ -51,6 +51,15 @@ let routes = [
 		component: () => import('../views/MyNFTs.vue'),
 	},
 	{
+		path: '/transferrequests',
+		name: 'Transfer Requests',
+		layout: "dashboard",
+		meta: {
+			layoutClass: 'layout-transferreqs',
+		},
+		component: () => import('../views/TransferRequests.vue'),
+	},
+	{
 		path: '/billing',
 		name: 'Billing',
 		layout: "dashboard",

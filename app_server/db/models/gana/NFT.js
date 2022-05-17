@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
+const { Sequelize, DataTypes, Op } = require('sequelize');
 
 async function init(db_gana) {
     const NFT = db_gana.define('NFT', {
@@ -107,17 +107,31 @@ async function read2(NFT, ownerAddress, orderDirection='DESC') {
     }
 }
 
-async function read3(NFT, orderDirection='DESC') {
-    const nft = await NFT.findAll({
-        order: [
-            ['created_at', orderDirection]
-        ]
-    });
+async function read3(NFT, tokenIds, orderDirection='DESC') {
+    let nfts;
+    if(tokenIds.length > 0)
+    {
+        nfts = await NFT.findAll({
+            where: {
+                tokenId: {
+                    [Op.in]: tokenIds
+                }
+            }
+        });
+    }
+    else {
+        nfts = await NFT.findAll({
+            order: [
+                ['created_at', orderDirection]
+            ]
+        });
+    }
 
-    console.log("Read all Result: " + JSON.stringify(nft));
+    console.log("Read all NFTS. Params; tokenIds: " + tokenIds + 
+    "Result: " + JSON.stringify(nfts));
 
-    if(nft instanceof Array) {
-        return nft;
+    if(nfts instanceof Array) {
+        return nfts;
     }
 }
 

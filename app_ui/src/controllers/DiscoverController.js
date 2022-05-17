@@ -29,10 +29,10 @@ function retrieveTokenOwnershipHistory(tokenId) {
   });
 }
 
-function retrieveNFTs() {
+function retrieveNFTs(tokenIds=[]) {
   return new Promise((resolve, reject) => {
     console.log("DiscoverController -> retrieveNFTs function called");
-    const nftsAPI = process.env.VUE_APP_TOKEN_GANA_API + '/tokens';
+    const nftsAPI = process.env.VUE_APP_TOKEN_GANA_API + '/tokens?ids=' + ''.concat(tokenIds);
     axios.get(nftsAPI).then(response => {
       if(response.status == 200 && typeof(response.data) === typeof({})) {
           let nfts = [];

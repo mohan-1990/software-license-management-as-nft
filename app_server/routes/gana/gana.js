@@ -124,7 +124,19 @@ async function create_NFT(app, route) {
 
 async function read_NFTs(app, route) {
     app.get(route, async function(req,res) {
-        let NFTs = await NFT.read3(db_context.models.gana['NFT']);
+        let tokenIds = req.query['ids'];
+
+        if(tokenIds !== null && tokenIds !== undefined && tokenIds !== "") {
+            tokenIds = tokenIds
+            .split(',')
+            .filter(x=> x != "")
+            .map(x => parseInt(x));
+        }
+        else {
+            tokenIds = [];
+        }
+
+        let NFTs = await NFT.read3(db_context.models.gana['NFT'], tokenIds);
         res.set('Content-Type', 'application/json');     
         res.status(200);
         res.send(NFTs);   
@@ -234,17 +246,10 @@ async function retrievePendingTransfers(app, route) {
 
         let pendingTransferFields = Object.keys(db_context.models.gana['PendingTransfer'].rawAttributes);
 
-        if(address === "" || address === null || address === undefined ||
-        filterBy === "" || filterBy === null || filterBy === undefined) {
+        if(address === "" || address === null || address === undefined) {
             res.status(400);
             res.send("Missing query parameters." +
             "Please try again with values for address and filterby query parameters.");
-            next();
-        }
-        if(!filterBy in pendingTransferFields) {
-            res.status(400);
-            res.send("Invalid query parameter value for filterBy." +
-            "Please try again with one of the allowed values [owner, requester]");
             next();
         }
 

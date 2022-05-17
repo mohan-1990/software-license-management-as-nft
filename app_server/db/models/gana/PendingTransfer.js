@@ -54,10 +54,28 @@ async function create(PendingTransfer, params) {
 }
 
 async function read(PendingTransfer, field, address) {
-    const pendingTransfer = await PendingTransfer.findAll({
-        where: Sequelize.where(Sequelize.fn('lower', Sequelize.col(field)),
-        Sequelize.fn('lower', address))
-    });
+    let pendingTransfer;
+    console.log("Field; " + field);
+    if(field === null || field === undefined || field === "") {
+        console.log("Inside undefined");
+        pendingTransfer = await PendingTransfer.findAll({
+            where: {
+                [Op.or]: [
+                    Sequelize.where(Sequelize.fn('lower', Sequelize.col("requesterAddress")), 
+                        Sequelize.fn('lower', address)),
+                    Sequelize.where(Sequelize.fn('lower', Sequelize.col("ownerAddress")), 
+                    Sequelize.fn('lower', address))
+                ]
+            }
+        });
+    }
+    else {
+        console.log("Inside normal");
+        pendingTransfer = await PendingTransfer.findAll({
+            where: Sequelize.where(Sequelize.fn('lower', Sequelize.col(field)),
+            Sequelize.fn('lower', address))
+        });
+    }
 
     console.log("Read Pending Transfer where : " + field + " = " + address + " " + JSON.stringify(pendingTransfer));
     return pendingTransfer;

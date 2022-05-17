@@ -1,0 +1,15 @@
+// _mynft.scss
+// 
+// MyNFT page styles.
+// 
+
+@import "_profile.scss" ;
+
+// MyNFT Page
+.layout-transferreqs {
+	@extend .layout-profile;
+}
+.layout-transferreqs-nav-bg {
+	@extend .profile-nav-bg
+}
+// MyNFT Page
