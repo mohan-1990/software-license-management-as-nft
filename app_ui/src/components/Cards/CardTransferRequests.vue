@@ -34,6 +34,9 @@
 				<a-button 
 					v-if="action_or_message.account == action_or_message.owner"
 					type="primary"
+					@click="handleTransferBtnClick
+					(action_or_message.owner, action_or_message.requester,
+					action_or_message.tokenId)"
 					:disabled="isTransferRequestSuccessful"
 					:loading="isTransferRequestInProgress">
 						Transfer
@@ -49,6 +52,7 @@
 
 <script>
 
+	import transferRequestsController from "../../controllers/TransferRequestsController"
 	export default ({
 		props: {
 			data: {
@@ -73,8 +77,8 @@
 			}
 		},
 		methods: {
-			handleTransferConfirm(tokenId) {
-				console.log("Handle transfer request for token id: " + tokenId);
+			async handleTransferBtnClick(owner, requester, tokenId) {
+				await transferRequestsController.transferToken(this, owner, requester, tokenId);
 			}
 		}
 	})

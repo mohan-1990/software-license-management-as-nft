@@ -55,9 +55,7 @@ async function create(PendingTransfer, params) {
 
 async function read(PendingTransfer, field, address) {
     let pendingTransfer;
-    console.log("Field; " + field);
     if(field === null || field === undefined || field === "") {
-        console.log("Inside undefined");
         pendingTransfer = await PendingTransfer.findAll({
             where: {
                 [Op.or]: [
@@ -70,7 +68,6 @@ async function read(PendingTransfer, field, address) {
         });
     }
     else {
-        console.log("Inside normal");
         pendingTransfer = await PendingTransfer.findAll({
             where: Sequelize.where(Sequelize.fn('lower', Sequelize.col(field)),
             Sequelize.fn('lower', address))
@@ -81,8 +78,23 @@ async function read(PendingTransfer, field, address) {
     return pendingTransfer;
 }
 
+async function read2(PendingTransfer, tokenId) {
+    const pendingTransfer = await PendingTransfer.findAll({
+        where: {
+            tokenId: tokenId
+        }
+    });
+
+    if(pendingTransfer instanceof Array) {
+        return pendingTransfer[0];
+    }
+    else {
+        return undefined;
+    }
+}
+
 async function update(PendingTransfer, tokenId, message) {
-    const pendingTransfer = await read(PendingTransfer, tokenId);
+    const pendingTransfer = await read2(PendingTransfer, tokenId);
     if(pendingTransfer !== undefined) {
         const pendingTransferOld = {
             ...pendingTransfer
@@ -100,7 +112,7 @@ async function update(PendingTransfer, tokenId, message) {
 }
 
 async function delete2(PendingTransfer, tokenId) {
-    const pendingTransfer = await read(PendingTransfer, tokenId);
+    const pendingTransfer = await read2(PendingTransfer, tokenId);
     if(pendingTransfer !== undefined) {
         let response = await pendingTransfer.destroy();
         console.log("Pending Trasfer deleted by tokenId: " + tokenId + ". Result: " + JSON.stringify(response));
